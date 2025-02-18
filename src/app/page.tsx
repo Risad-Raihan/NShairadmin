@@ -2,7 +2,6 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import Image from "next/image";
 
 export default function Home() {
   return (
@@ -31,10 +30,10 @@ export default function Home() {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5 }}
           className="text-xl text-gray-600"
-        >
-          Welcome to your production management dashboard
-        </motion.p>
-      </motion.div>
-    </div>
-  );
-}
+          >
+            Welcome to your production management dashboard
+          </motion.p>
+        </motion.div>
+      </div>
+    );
+  }
