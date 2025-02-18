@@ -3,19 +3,104 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --primary-gradient: linear-gradient(135deg, #2C3E50, #3498db);
+  --secondary-gradient: linear-gradient(135deg, #3498db, #2ecc71);
+  --accent-gradient: linear-gradient(135deg, #2ecc71, #f1c40f);
+  --background-color: #f8f9fa;
+  --card-background: #ffffff;
+  --text-color: #2C3E50;
+  --border-radius: 12px;
+  --box-shadow: 0 8px 16px rgba(44, 62, 80, 0.15);
+  --section-padding: 1.5rem;
+  --transition-duration: 0.6s;
+  --transition-timing: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  html {
+    font-family: 'Outfit', system-ui, sans-serif;
+  }
+  
+  body {
+    @apply bg-gray-50 text-gray-900 min-h-screen;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-outfit;
   }
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  .mobile-container {
+    @apply max-w-md mx-auto px-4 py-6;
+  }
+
+  .nav-link {
+    @apply px-4 py-2 text-gray-700 hover:text-blue-600 transition-colors duration-200;
+  }
+
+  .nav-link.active {
+    @apply text-blue-600 font-semibold;
+  }
+
+  .card {
+    @apply bg-white rounded-xl shadow-lg p-6;
+  }
+
+  .input-group {
+    @apply mb-4;
+  }
+
+  .input-group label {
+    @apply block text-sm font-medium text-gray-700 mb-1;
+  }
+
+  .input-group input {
+    @apply w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200;
+  }
+
+  .result-item {
+    @apply bg-white p-4 rounded-lg shadow-md mb-4;
+  }
+
+  .result-item label {
+    @apply text-sm font-medium text-gray-600 flex items-center;
+  }
+
+  .result-item span {
+    @apply block text-lg font-semibold text-blue-600 mt-1;
+  }
 }
+
+.floating-text {
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+/* Font animations */
+.animate-text-fade-in {
+  animation: textFadeIn 0.5s ease-out forwards;
+}
+
+@keyframes textFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
