@@ -1,6 +1,5 @@
 import { google } from 'googleapis';
 
-const SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly'];
 const SHEET_ID = '1basTADjo0L-SCz293hXefy7EebbUV7n-LjzxS_sskZM';
 
 interface ShipmentData {
@@ -13,10 +12,13 @@ interface ShipmentData {
 
 export async function getShipmentData(): Promise<ShipmentData> {
   try {
-    const auth = new google.auth.GoogleAuth({
-      scopes: SCOPES,
-      keyFile: process.env.GOOGLE_APPLICATION_CREDENTIALS,
-    });
+    // Using service account credentials directly
+    const auth = new google.auth.JWT(
+      process.env.GOOGLE_CLIENT_EMAIL,
+      undefined,
+      process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
+      ['https://www.googleapis.com/auth/spreadsheets.readonly']
+    );
 
     const sheets = google.sheets({ version: 'v4', auth });
     const response = await sheets.spreadsheets.values.get({
