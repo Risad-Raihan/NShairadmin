@@ -12,7 +12,7 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 const CONSTANTS = {
   HAIR_PER_WIG: 80,
   HAIR_COST_PER_KG: 7000,
-  KNOTTING_TIME_PER_WIG: 7,
+  KNOTTING_TIME_PER_WIG: 5,
   KNOTTING_COST_PER_WIG: 1400,
   CHEMICAL_PER_5_WIGS: 500,
   CHEMICAL_COST_PER_KG: 2000,
@@ -21,12 +21,12 @@ const CONSTANTS = {
 
 export default function Calculator() {
   const [numWigs, setNumWigs] = useState<number>(0);
-  const [numWorkers, setNumWorkers] = useState<number>(0);
+  const [productionDays, setProductionDays] = useState<number>(0);
   const [calculations, setCalculations] = useState({
     totalHair: 0,
     totalChemical: 0,
     hairCost: 0,
-    knottingTime: 0,
+    requiredWorkers: 0,
     knottingCost: 0,
     chemicalCost: 0,
     totalCostPerWig: 0,
@@ -43,11 +43,11 @@ export default function Calculator() {
   };
 
   useEffect(() => {
-    if (numWigs > 0 && numWorkers > 0) {
+    if (numWigs > 0 && productionDays > 0) {
       const totalHair = numWigs * CONSTANTS.HAIR_PER_WIG;
       const totalChemical = (numWigs * CONSTANTS.CHEMICAL_PER_5_WIGS) / 5;
       const hairCost = (totalHair / 1000) * CONSTANTS.HAIR_COST_PER_KG;
-      const knottingTime = Math.ceil(numWigs / numWorkers) * CONSTANTS.KNOTTING_TIME_PER_WIG;
+      const requiredWorkers = Math.ceil((numWigs * CONSTANTS.KNOTTING_TIME_PER_WIG) / productionDays);
       const knottingCost = numWigs * CONSTANTS.KNOTTING_COST_PER_WIG;
       const chemicalCost = (totalChemical / 1000) * CONSTANTS.CHEMICAL_COST_PER_KG;
       const totalCostPerWig = (hairCost + knottingCost + chemicalCost) / numWigs;
@@ -57,14 +57,14 @@ export default function Calculator() {
         totalHair,
         totalChemical,
         hairCost,
-        knottingTime,
+        requiredWorkers,
         knottingCost,
         chemicalCost,
         totalCostPerWig,
         totalCost
       });
     }
-  }, [numWigs, numWorkers]);
+  }, [numWigs, productionDays]);
 
   const chartData = {
     labels: ['Hair Cost', 'Knotting Cost', 'Chemical Cost', 'Fixed Monthly Cost'],
@@ -115,19 +115,19 @@ export default function Calculator() {
           />
         </div>
         <div className="input-group">
-          <label htmlFor="numWorkers">Number of Workers:</label>
+          <label htmlFor="productionDays">Production Days:</label>
           <input
             type="number"
-            id="numWorkers"
+            id="productionDays"
             min="1"
-            value={numWorkers || ''}
-            onChange={(e) => setNumWorkers(parseInt(e.target.value) || 0)}
-            placeholder="Enter number of workers"
+            value={productionDays || ''}
+            onChange={(e) => setProductionDays(parseInt(e.target.value) || 0)}
+            placeholder="Enter production days"
           />
         </div>
       </motion.div>
 
-      {(numWigs > 0 && numWorkers > 0) && (
+      {numWigs > 0 && productionDays > 0 && (
         <>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
             <div className="card">
@@ -149,13 +149,13 @@ export default function Calculator() {
             </div>
 
             <div className="card">
-              <h2 className="text-lg font-semibold mb-4">Production Timeline</h2>
+              <h2 className="text-lg font-semibold mb-4">Production Requirements</h2>
               <div className="result-item">
                 <label className="flex items-center">
-                  Knotting Time Required
-                  <InformationCircleIcon className="w-4 h-4 ml-1 text-gray-500" title="Each wig takes 7 days to knot" />
+                  Required Workers
+                  <InformationCircleIcon className="w-4 h-4 ml-1 text-gray-500" title="Each wig takes 5 days to knot" />
                 </label>
-                <span>{calculations.knottingTime} days</span>
+                <span>{calculations.requiredWorkers} workers</span>
               </div>
             </div>
           </div>
